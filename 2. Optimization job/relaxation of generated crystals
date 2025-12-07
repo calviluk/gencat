@@ -1,0 +1,26 @@
+#!/bin/bash
+#BSUB -J myjob          # Job name
+#BSUB -o output.%J.log  # Standard output file
+#BSUB -e error.%J.log   # Standard error file
+#BSUB -q gpua100          # Queue/partition name
+#BSUB -n 8              # Number of CPU cores
+#BSUB -W 20:00          # Walltime (HH:MM)
+#BSUB -R "rusage[mem=2000]"  # Memory per core in MB
+nvidia-smi
+
+
+#export MODEL_NAME=mattergen_base
+#export RESULTS_PATH=results_test2/  # Samples will be written to this directory
+source /zhome/7b/9/214261/.venv/bin/activate
+export MODEL_NAME=chemical_system_energy_above_hull
+export RESULTS_PATH="/zhome/7b/9/214261/relaxed structures/all_generated_crystals.extxyz"
+mattergen-evaluate --structures_path=$RESULTS_PATH --relax=True --structure_matcher='disordered' --save_as='metrics.json' --structures_output_path="relaxed_structures.extxyz"
+~
+~
+~
+~
+~
+~
+~
+~
+~
