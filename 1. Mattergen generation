@@ -1,0 +1,17 @@
+#!/bin/bash
+#BSUB -J myjob          # Job name
+#BSUB -o output.%J.log  # Standard output file
+#BSUB -e error.%J.log   # Standard error file
+#BSUB -q gpua100          # Queue/partition name
+#BSUB -n 8              # Number of CPU cores
+#BSUB -W 20:00          # Walltime (HH:MM)
+#BSUB -R "rusage[mem=2000]"  # Memory per core in MB
+nvidia-smi
+
+#export MODEL_NAME=mattergen_base
+#export RESULTS_PATH=results_test2/  # Samples will be written to this directory
+source .venv/bin/activate
+export MODEL_NAME=chemical_system_energy_above_hull
+export RESULTS_PATH="/work3/s251583/results/$MODEL_NAME/job_$LSB_JOBID/"
+mkdir -p $RESULTS_PATH
+mattergen-generate $RESULTS_PATH --pretrained-name=$MODEL_NAME --batch_size=16 --num_batches=100 --properties_to_condition_on="{'energy_above_hull': 0.1}" --diffusion_guidance=2.0
